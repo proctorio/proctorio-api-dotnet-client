@@ -1,0 +1,18 @@
+trigger:
+  branches:
+    include:
+    - main
+
+resources:
+  repositories:
+    - repository: templates
+      type: git
+      name: Plumbing/core-templates
+    - repository: API
+      type: git
+      name: Open/API
+
+stages:
+- template: stages/sync/azure-sync.yml@templates  # Template reference
+  parameters:
+    checkout: API
