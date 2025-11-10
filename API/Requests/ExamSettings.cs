@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Proctorio.Client.API.Requests;
 
@@ -150,6 +151,52 @@ public class ExamSettings
     /// </summary>
     [JsonPropertyName("whiteboard")]
     public bool Whiteboard { get; set; }
+
+    /// <summary>
+    /// Will prevent the Candidate from using other browser extensions during the exam except for allowlisted ones.
+    /// </summary>
+    [JsonPropertyName("disable_extensions")]
+    public bool DisableExtensions { get; set; }
+    /// <summary>
+    /// This setting will allow a Proctor to monitor the Candidate during the exam and allow immediate intervention. Also, the full recording and report will be available via the Proctorio Review Center. Requires the following settings to be set to true: record_video, verify_video.
+    /// </summary>
+    [JsonPropertyName("live_proctor")]
+    public bool LiveProctor { get; set; }
+    /// <summary>
+    /// Allows exam to be taken on mobile device, using MobileExam application. Requires use of pre_auth in launch request. Not compatible with verify_id: 2 setting
+    /// </summary>
+    [JsonPropertyName("mobile")]
+    public bool Mobile { get; set; }
+    /// <summary>
+    /// Prevents use of other applications during exam. Requires use of the Secure Companion application.
+    /// </summary>
+    [JsonPropertyName("advanced_program_detection")]
+    public bool AdvancedProgramDetection { get; set; }
+    /// <summary>
+    /// Logs hardware changes during exam in the Review Center. Requires use of the Secure Companion application.
+    /// </summary>
+    [JsonPropertyName("advanced_hardware_detection")]
+    public bool AdvancedHardwareDetection { get; set; }
+    /// <summary>
+    /// Prevents use of virtual machine to take exam. Requires use of the Secure Companion application.
+    /// </summary>
+    [JsonPropertyName("advanced_vm_detection")]
+    public bool AdvancedVmDetection { get; set; }
+    /// <summary>
+    /// List maximum of 5 allowed applications that can remain open when advanced_program_detection is used. Applications are identified by bundle ID on MacOS.
+    /// </summary>
+    [JsonPropertyName("allowed_macos_apps")]
+    public List<string> AllowedMacosApps { get; set; } = new List<string>();
+    /// <summary>
+    /// List maximum of 5 allowed applications that can remain open when advanced_program_detection is used. Applications are identified by binary_name, product_name and company_name on Windows.
+    /// </summary>
+    [JsonPropertyName("allowed_windows_apps")]
+    public List<WindowsAllowedApp> AllowedWindowsApps { get; set; } = new List<WindowsAllowedApp>();
+    /// <summary>
+    /// Sets the strictness level for validating allowed applications when advanced_program_detection, allowed_macos_apps and allowed_windows_apps are used.
+    /// </summary>
+    [JsonPropertyName("strict_apps_validation")]
+    public StrictAppsValidationLevel StrictAppsValidation { get; set; } = StrictAppsValidationLevel.Default;
 }
 
 public enum VerifyIdSettingRequest
@@ -237,4 +284,32 @@ public enum CalculatorSettingRequest
     /// Provides the Candidate with an on-screen calculator with graphing functions.
     /// </summary>
     Graphing
+}
+
+public class WindowsAllowedApp
+{
+    /// <summary>
+    /// The binary name of the application.
+    /// </summary>
+    [JsonPropertyName("binary_name")]
+    [StringLength(50, MinimumLength = 1, ErrorMessage = "The binary_name value cannot be empty or exceed 50 characters.")]
+    public string? BinaryName { get; set; }
+    /// <summary>
+    /// The product name of the application.
+    /// </summary>
+    [JsonPropertyName("product_name")]
+    [StringLength(50, MinimumLength = 1, ErrorMessage = "The product_name value cannot be empty or exceed 50 characters.")]
+    public string? ProductName { get; set; }
+    /// <summary>
+    /// The company name of the application.
+    /// </summary>
+    [JsonPropertyName("company_name")]
+    [StringLength(50, MinimumLength = 1, ErrorMessage = "The company_name value cannot be empty or exceed 50 characters.")]
+    public string? CompanyName { get; set; }
+}
+
+public enum StrictAppsValidationLevel
+{
+    Off,
+    Default,
 }

@@ -42,5 +42,18 @@ namespace Proctorio.Client.API.Requests
         /// </summary>
         [JsonPropertyName("behavior_settings")]
         public BehaviorSettings? BehaviorSettings { get; set; }
+
+        /// <summary>
+        /// The "domain" parameter is optional. By utilizing "domain", the exam pages as well as the Reviewer Center will load with your desired domain. 
+        /// <para/>
+        /// The URL will no longer point to the https://getproctorio.com page. Instead, the Candidates/Reviewers will be directed to the new route you provided in the parameter, example: https://yourdomain.com. 
+        /// <para/>
+        /// This allows the utilization of additional cross-origin security mechanisms, which use the SameSite cookies or X-Frame-Options: SAMEORIGIN header. It will also provide the ability to prevent data loss in session or local storage related to storage partitioning browser functionality. 
+        /// <para/>
+        /// The https://getproctorio.com page has the following functionalities: Check if a Candidate/Reviewer has the supported browser installed. Check if a Candidate/Reviewer has the Proctorio
+        /// </summary>
+        [JsonPropertyName("domain")]
+        [StringLength(100, MinimumLength = 1, ErrorMessage = "When used, the domain value cannot be empty or exceed 100 characters.")]
+        public string? Domain { get; set; }
     }
 }

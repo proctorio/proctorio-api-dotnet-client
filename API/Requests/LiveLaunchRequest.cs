@@ -9,17 +9,13 @@ namespace Proctorio.Client.API.Requests
     /// </summary>
     public class LiveLaunchRequest : LaunchRequest
     {
-        public LiveLaunchRequest(string userId, ExamSettings examSettings) : base(userId)
+        public LiveLaunchRequest(string userId) : base(userId)
         {
-            ExamSettings = examSettings;
             var validationResult = Helpers.Validate(this);
             if (!validationResult.IsValid)
                 throw new ArgumentException(JsonSerializer.Serialize(validationResult.ValidationResults));
 
         }
-
-        [JsonPropertyName("display_name")]
-        public string? DisplayName { get; set; }
 
         /// <summary>
         /// Number of seconds before the Live launch URL is no longer valid. The default value for this parameter is 3600 seconds. If a value is not passed, the default value will be applied. Must be an integer value.
@@ -43,11 +39,5 @@ namespace Proctorio.Client.API.Requests
         /// </remarks>
         [JsonPropertyName("behavior_settings")]
         public BehaviorSettings? BehaviorSettings { get; set; }
-
-        /// <summary>
-        /// Exam settings.
-        /// </summary>
-        [JsonPropertyName("exam_settings")]
-        public ExamSettings ExamSettings { get; set; }
     }
 }

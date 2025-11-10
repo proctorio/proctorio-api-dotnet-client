@@ -32,12 +32,6 @@ public abstract class LaunchRequest
     public string? ExamTag { get; set; }
 
     /// <summary>
-    /// The "domain" parameter is optional. By utilizing a custom domain, the exam pages as well as the Reviewer Center will loaded on your desired domain with your institution’s branding and design instead of getproctorio.com.
-    /// </summary>
-    [JsonPropertyName("domain")]
-    public string? Domain { get; set; }
-
-    /// <summary>
     /// Represents a course ID or a section ID value. This parameter is optional. It provides a more granular sorting of the exams.
     /// </summary>
     /// <remarks>
