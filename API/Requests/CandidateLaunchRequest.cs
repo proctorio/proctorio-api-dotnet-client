@@ -11,16 +11,16 @@ namespace Proctorio.Client.API.Requests
     {
         public CandidateLaunchRequest(string userId, 
             string launchUrl,
-            string exam_start,
-            string exam_take,
-            string exam_end,
+            string examStart,
+            string examTake,
+            string examEnd,
             ExamSettings examSettings
            ) : base(userId)
         {
             LaunchUrl = launchUrl;
-            ExamStart = exam_start;
-            ExamTake = exam_take;
-            ExamEnd = exam_end;
+            ExamStart = examStart;
+            ExamTake = examTake;
+            ExamEnd = examEnd;
             ExamSettings = examSettings;
 
             var validationResult = Helpers.Validate(this);

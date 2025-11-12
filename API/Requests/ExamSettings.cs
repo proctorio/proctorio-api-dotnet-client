@@ -46,7 +46,7 @@ public class ExamSettings
 
     /// <summary>
     /// Will ensure that the webcam is working and it is not virtualized or broken. 
-    /// </summary>
+    /// </summary>  
     /// <remarks>
     /// Requires the following settings to be set to true: RecordVideo.
     /// </remarks>
