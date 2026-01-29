@@ -13,6 +13,6 @@ resources:
       name: Open/proctorio-api-dotnet-client
 
 stages:
-- template: stages/sync/azure-sync.yml@templates  # Template reference
+- template: stages/sync/sync.yml@templates  # Template reference
   parameters:
     checkout: proctorio-api-dotnet-client
