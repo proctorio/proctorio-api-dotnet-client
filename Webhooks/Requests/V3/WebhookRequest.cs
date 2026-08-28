@@ -99,7 +99,7 @@ namespace Proctorio.Client.Webhooks.Requests.V3
         /// </summary>
         /// <remarks>
         ///  In the event of an ungraceful submission, this date may differ from the platform's recorded submission time.
-        /// <remarks>
+        /// </remarks>
         [JsonPropertyName("date")]
         public long Date { get; set; }
 

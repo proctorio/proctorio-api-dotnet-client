@@ -9,10 +9,13 @@ namespace Proctorio.Client.API.Requests
     /// </summary>
     public class ReviewerLaunchRequest : LaunchRequest
     {
+        /// <summary>
+        /// Creates a Reviewer launch request.
+        /// </summary>
         public ReviewerLaunchRequest(string userId, ExamSettings examSettings) : base(userId)
         {
             ExamSettings = examSettings;
-            var validationResult = Helpers.Validate(this);
+            ValidationOutput validationResult = Helpers.Validate(this);
             if (!validationResult.IsValid)
                 throw new ArgumentException(JsonSerializer.Serialize(validationResult.ValidationResults));
         }
@@ -42,5 +45,11 @@ namespace Proctorio.Client.API.Requests
         /// </summary>
         [JsonPropertyName("behavior_settings")]
         public BehaviorSettings? BehaviorSettings { get; set; }
+
+        /// <summary>
+        /// Options to customize some user interface controls on the Candidate UI.
+        /// </summary>
+        [JsonPropertyName("branding")]
+        public Branding? Branding { get; set; }
     }
 }
