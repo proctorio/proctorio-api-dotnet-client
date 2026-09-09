@@ -152,12 +152,6 @@ public class ExamSettings
     public bool Whiteboard { get; set; }
 
     /// <summary>
-    /// Will prevent the Candidate from using other browser extensions during the exam except for allowlisted ones.
-    /// </summary>
-    [JsonPropertyName("disable_extensions")]
-    public bool DisableExtensions { get; set; }
-
-    /// <summary>
     /// This setting will allow a Proctor to monitor the Candidate during the exam and allow immediate intervention.
     /// Also, the full recording and report will be available via the Proctorio Review Center.
     /// </summary>
