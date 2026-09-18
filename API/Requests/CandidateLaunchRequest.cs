@@ -9,24 +9,34 @@ namespace Proctorio.Client.API.Requests
     /// </summary>
     public class CandidateLaunchRequest : LaunchRequest
     {
-        public CandidateLaunchRequest(string userId, 
+        /// <summary>
+        /// Creates a Candidate launch request.
+        /// </summary>
+        public CandidateLaunchRequest(string userId,
             string launchUrl,
-            string exam_start,
-            string exam_take,
-            string exam_end,
+            string examStart,
+            string examTake,
+            string examEnd,
             ExamSettings examSettings
            ) : base(userId)
         {
             LaunchUrl = launchUrl;
-            ExamStart = exam_start;
-            ExamTake = exam_take;
-            ExamEnd = exam_end;
+            ExamStart = examStart;
+            ExamTake = examTake;
+            ExamEnd = examEnd;
             ExamSettings = examSettings;
 
-            var validationResult = Helpers.Validate(this);
+            ValidationOutput validationResult = Helpers.Validate(this);
             if (!validationResult.IsValid)
                 throw new ArgumentException(JsonSerializer.Serialize(validationResult.ValidationResults));
         }
+
+        /// <summary>
+        /// Url used to pre-authenticate Candidate on MobileExam application.
+        /// </summary>
+        [JsonPropertyName("pre_auth")]
+        [StringLength(600, MinimumLength = 1, ErrorMessage = "When used, the pre_auth value cannot be empty or exceed 600 characters.")]
+        public string? PreAuth { get; set; }
 
         /// <summary>
         /// Must contain a valid absolute URL, that fully launches to the exam start page with no additional authentication. The "LaunchUrl" value should be included in the "ExamStart" regex pattern, alongside any of the redirects.
@@ -46,7 +56,7 @@ namespace Proctorio.Client.API.Requests
 
         /// <summary>
         /// Must be a regular expression to match the in-exam page URLs (the URL of the exam), and any redirects. In cases where there are questions on multiple pages, this is important. Anything else visited that does not match this or the exam_end parameter will be considered leaving the exam and the session will be considered complete.
-        /// <summary>
+        /// </summary>
         [JsonPropertyName("exam_take")]
         [Required]
         [StringLength(1000, MinimumLength = 1, ErrorMessage = "The exam_take value cannot be empty or exceed 1000 characters.")]
@@ -61,7 +71,7 @@ namespace Proctorio.Client.API.Requests
         public string ExamEnd { get; set; }
 
         /// <summary>
-        /// The exam settings control the lockdown, recording, and verification requirements for the exam.Every exam is different; some may allow the Candidates to use other websites or applications, while others will prevent these functions.
+        /// The exam settings control the lockdown, recording, and verification requirements for the exam. Every exam is different; some may allow the Candidates to use other websites or applications, while others will prevent these functions.
         /// </summary>
         [JsonPropertyName("exam_settings")]
         public ExamSettings ExamSettings { get; set; }
@@ -74,10 +84,70 @@ namespace Proctorio.Client.API.Requests
         public int? Expire { get; set; } = 18000;
 
         /// <summary>
-        /// The RedirectUrl parameter is optional. If provided it will allow the Candidate to be redirected to that URL, by clicking the "Click here" hyperlink in case they refreshed the page or clicked the back button during the exam.
+        /// [Deprecated] The RedirectUrl parameter is optional. If provided it will allow the Candidate to be redirected to that URL, by clicking the "Click here" hyperlink in case they refreshed the page or clicked the back button during the exam.
         /// </summary>
         [JsonPropertyName("redirect_url")]
         [StringLength(600, MinimumLength = 1, ErrorMessage = "The redirect_url value cannot be empty or exceed 600 characters.")]
+        [Obsolete("This parameter is deprecated and will be removed in future versions.")]
         public string? RedirectUrl { get; set; }
+
+        /// <summary>
+        /// The redirect_settings parameter is optional. If provided, the Candidate will be redirected to provided URLs depending on exam end.
+        /// </summary>
+        [JsonPropertyName("redirect_settings")]
+        public RedirectSettings? RedirectSettings { get; set; }
+
+        /// <summary>
+        /// The unique identifier for a specific attempt of the Candidate. Must contain an alphanumeric (hyphens also acceptable) value. 
+        /// The "attempt_id" value should be reused when generating a new Candidate URL, for the Candidate that is resuming the same attempt on the learning platform.
+        /// </summary>
+        [JsonPropertyName("attempt_id")]
+        [StringLength(36, MinimumLength = 1, ErrorMessage = "When used, the attempt_id value cannot be empty or exceed 36 characters.")]
+        [RegularExpression("^[a-zA-Z0-9-]*$", ErrorMessage = "The attempt_id must contain an alphanumeric (hyphens also acceptable) value.")]
+        public string? AttemptId { get; set; }
+
+        /// <summary>
+        /// Only to be used when "roster_url" and "user_id" do not contain the Candidate's name. The "display_name" information is NOT saved, and will not be available in the Review Center for Reviewer or for Proctor.
+        /// It is used only for the Live ID verification and Exam Agreement on the Candidate side.
+        /// </summary>
+        [JsonPropertyName("display_name")]
+        [StringLength(100, MinimumLength = 1, ErrorMessage = "When used, the display_name value cannot be empty or exceed 100 characters.")]
+        public string? DisplayName { get; set; }
+
+        /// <summary>
+        /// Extension Allowlist endpoint URL. Http Method: GET. The response should be a JSON stringified array. For example: '[extensionID1,extensionID2]'.
+        /// The extension_allowlist_url can be used for Candidates that have force enabled extensions in the browser by institution. These extensions can't be disabled manually by Candidate.
+        /// The 'extensionID' value should correspond to ID of the extension that will be allowed to remain active during Proctored attempt.
+        /// </summary>
+        [JsonPropertyName("extension_allowlist_url")]
+        [StringLength(600, MinimumLength = 1, ErrorMessage = "When used, the extension_allowlist_url value cannot be empty or exceed 600 characters.")]
+        public string? ExtensionAllowlistUrl { get; set; }
+
+        /// <summary>
+        /// Candidate is allowed to take a break during the exam.
+        /// </summary>
+        [JsonPropertyName("break_settings")]
+        public BreakSettings? BreakSettings { get; set; }
+
+        /// <summary>
+        /// Options to customize some user interface controls on the Candidate UI.
+        /// </summary>
+        [JsonPropertyName("branding")]
+        public Branding? Branding { get; set; }
+
+        /// <summary>
+        /// Post_auth requires pre_auth. It is used after pre-auth, once the Candidate is already logged into the platform.
+        /// This parameter defines the point at which it is expect prechecks to start. 
+        /// After the prechecks are completed, the Candidate is sent to the launch_url.
+        /// </summary>
+        [JsonPropertyName("post_auth")]
+        [StringLength(600, MinimumLength = 1, ErrorMessage = "When used, the post_auth cannot be empty or exceed 600 characters.")]
+        public string? PostAuth { get; set; }
+
+        /// <summary>
+        /// The pre_auth_bypass is optional. When used and set to true, it allows bypassing pre-authentication for Candidate on MobileExam application.
+        /// </summary>
+        [JsonPropertyName("pre_auth_bypass")]
+        public bool? PreAuthBypass { get; set; }
     }
 }

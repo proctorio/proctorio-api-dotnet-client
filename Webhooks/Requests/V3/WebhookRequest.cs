@@ -16,13 +16,13 @@ namespace Proctorio.Client.Webhooks.Requests.V3
         /// Object which contains information about webhook data.
         /// </summary>
         [JsonPropertyName("data")]
-        public WebhookRequestData Data { get; set; }
+        public WebhookRequestData? Data { get; set; }
 
         /// <summary>
         /// Webhook type
         /// </summary>
         [JsonPropertyName("type")]
-        public string Type { get; set; }
+        public string? Type { get; set; }
 
         /// <summary>
         /// A nonce (number used once) is a unique value that is generated for each request.
@@ -30,19 +30,19 @@ namespace Proctorio.Client.Webhooks.Requests.V3
         /// </summary>
         ///
         [JsonPropertyName("nonce")]
-        public string Nonce { get; set; }
+        public string? Nonce { get; set; }
 
         /// <summary>
         /// sha1 (nonce+”:”+”{{json stringified request.data(no spaces))}}”+”:”+{{secret}})- secret - value which proctorio initially shared with the client.
         /// </summary>
         [JsonPropertyName("signature")]
-        public string Signature { get; set; }
+        public string? Signature { get; set; }
 
         /// <summary>
         /// Generated key on your end and used to authorize the request. This is optional. You can choose a proper auth method for your API: api_key or signature validation.
         /// </summary>
         [JsonPropertyName("api_key")]
-        public string ApiKey { get; set; }
+        public string? ApiKey { get; set; }
     }
 
 
@@ -55,7 +55,7 @@ namespace Proctorio.Client.Webhooks.Requests.V3
         /// Unique value for proctorio internal purposes.
         /// </summary>
         [JsonPropertyName("id")]
-        public string Id { get; set; }
+        public string? Id { get; set; }
 
         /// <summary>
         /// Suspicion calculation calculated based on different parameters including behavior settings.
@@ -68,25 +68,25 @@ namespace Proctorio.Client.Webhooks.Requests.V3
         /// Represents the user_id value sent in candidate launch request.
         /// </summary>
         [JsonPropertyName("user_id")]
-        public string UserId { get; set; }
+        public string? UserId { get; set; }
 
         /// <summary>
         /// Represents the object containing submission data. 
         /// </summary>
         [JsonPropertyName("submission_data")]
-        public SubmissionData SubmissionData { get; set; }
+        public SubmissionData? SubmissionData { get; set; }
 
         /// <summary>
         ///  Represents the information about attempt id. If not passed returns a random uuid.  
         /// </summary>
         [JsonPropertyName("attempt_id")]
-        public string AttemptId { get; set; }
+        public string? AttemptId { get; set; }
 
         /// <summary>
         /// Represents an object containing information about the percentage (3 decimals) of detected incidents during the exam
         /// </summary>
         [JsonPropertyName("flags")]
-        public Flags Flags { get; set; }
+        public Flags? Flags { get; set; }
     }
 
     /// <summary>
@@ -99,7 +99,7 @@ namespace Proctorio.Client.Webhooks.Requests.V3
         /// </summary>
         /// <remarks>
         ///  In the event of an ungraceful submission, this date may differ from the platform's recorded submission time.
-        /// <remarks>
+        /// </remarks>
         [JsonPropertyName("date")]
         public long Date { get; set; }
 
@@ -113,13 +113,13 @@ namespace Proctorio.Client.Webhooks.Requests.V3
         ///  Represents the textual format of the Proctorio close_code message.
         /// </summary>
         [JsonPropertyName("message")]
-        public string Message { get; set; }
+        public string? Message { get; set; }
 
         /// <summary>
         /// When available, represents additional information regarding close code.
         /// </summary>
         [JsonPropertyName("description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
     }
 
     /// <summary>

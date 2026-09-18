@@ -9,17 +9,16 @@ namespace Proctorio.Client.API.Requests
     /// </summary>
     public class LiveLaunchRequest : LaunchRequest
     {
-        public LiveLaunchRequest(string userId, ExamSettings examSettings) : base(userId)
+        /// <summary>
+        /// Creates a Live proctoring launch request.
+        /// </summary>
+        public LiveLaunchRequest(string userId) : base(userId)
         {
-            ExamSettings = examSettings;
-            var validationResult = Helpers.Validate(this);
+            ValidationOutput validationResult = Helpers.Validate(this);
             if (!validationResult.IsValid)
                 throw new ArgumentException(JsonSerializer.Serialize(validationResult.ValidationResults));
 
         }
-
-        [JsonPropertyName("display_name")]
-        public string? DisplayName { get; set; }
 
         /// <summary>
         /// Number of seconds before the Live launch URL is no longer valid. The default value for this parameter is 3600 seconds. If a value is not passed, the default value will be applied. Must be an integer value.
@@ -45,9 +44,9 @@ namespace Proctorio.Client.API.Requests
         public BehaviorSettings? BehaviorSettings { get; set; }
 
         /// <summary>
-        /// Exam settings.
+        /// Settings related to live proctoring options such as allowing breaks, desk scans, interruptions, and kick-outs.
         /// </summary>
-        [JsonPropertyName("exam_settings")]
-        public ExamSettings ExamSettings { get; set; }
+        [JsonPropertyName("proctor_settings")]
+        public ProctorSettings? ProctorSettings { get; set; }
     }
 }

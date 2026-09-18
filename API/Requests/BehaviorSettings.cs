@@ -3,14 +3,19 @@
 namespace Proctorio.Client.API.Requests;
 
 /// <summary>
-/// Behavior settings determines the suspicion of each recorded action and configure exam analytics.Behavior settings should reflect the type of exam given(e.g., allowing head movement on an open-note exam) to achieve the desired results in the Proctorio Review Center.
+/// Behavior settings determines the suspicion of each recorded action and configure exam analytics. Behavior settings should reflect the type of exam given(e.g., allowing head movement on an open-note exam) to achieve the desired results in the Proctorio Review Center and suspicion calculation webhook.
 /// </summary>
 public class BehaviorSettings
 {
-
+    /// <summary>
+    /// Per-image metrics used to calculate suspicion level, weighted from 0 (off) to 5.
+    /// </summary>
     [JsonPropertyName("frame_metrics")]
     public FrameMetricsRequest FrameMetrics { get; set; } = new FrameMetricsRequest();
 
+    /// <summary>
+    /// Group-relative metrics used to highlight Candidates whose behavior differs significantly from the rest of the group.
+    /// </summary>
     [JsonPropertyName("exam_metrics")]
     public ExamMetricsRequest ExamMetrics { get; set; } = new ExamMetricsRequest();
 }
